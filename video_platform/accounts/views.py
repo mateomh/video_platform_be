@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import login
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm
 
 # Create your views here.
 class RegisterView(CreateView):
@@ -14,7 +14,7 @@ class RegisterView(CreateView):
     if request.user.is_authenticated:
       return redirect('/')
     
-    return super().dispatch(request, *args:*args, **kwargs)
+    return super().dispatch(request, *args, **kwargs)
   
   def form_valid(self, form):
     response = super().form_valid(form)
