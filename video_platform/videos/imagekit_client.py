@@ -63,3 +63,11 @@ def upload_thumbnail(file_data: bytes, file_name: str, folder: str = 'thumbnails
     "file_id": response.file_id,
     "url": response.url
   }
+
+
+def delete_video(file_id: str) -> bool:
+  client = get_imagekit_client()
+  client.files.delete(file_id=file_id)
+
+  return True
+
