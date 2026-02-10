@@ -7,9 +7,30 @@ from .forms import VideoUploadForm
 from .imagekit_client import upload_video, upload_thumbnail
 
 
+def video_detail(request, video_id):
+    video = get_object_or_404(Video.objects, id=video_id)
+
+    video.views += 1
+    video.save(update_fields=["views"])
+
+    user_vote = None
+    # if request.user.is_authenticated:
+    #     like = VideoLike.objects.filter(user=request.user, video=video).first()
+    #     if like:
+    #         user_vote = like.value
+
+    return render(request, "videos/detail.html", {"video": video, "user_vote": user_vote})
+
+
 def video_list(request):
     videos = Video.objects.all()
     return render(request, 'videos/list.html', {"videos": videos})
+
+
+def channel_videos(request, username):
+   videos = Video.objects.filter(user__username=username)
+
+   return render(request, 'videos/channel.html', {"videos": videos, "channel_name": username})
 
 
 @login_required
