@@ -1,12 +1,16 @@
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .models import Video, VideoLike
 from .forms import VideoUploadForm
 from .imagekit_client import upload_video, upload_thumbnail, delete_video
+from videos.serializers import VideoSerializer
 
 
+@api_view(['GET'])
 def video_detail(request, video_id):
     video = get_object_or_404(Video.objects, id=video_id)
 
@@ -19,12 +23,14 @@ def video_detail(request, video_id):
         if like:
             user_vote = like.value
 
-    return render(request, "videos/detail.html", {"video": video, "user_vote": user_vote})
+    serialized_video = VideoSerializer(video)
+    return Response(serialized_video.data)
 
-
+@api_view(['GET'])
 def video_list(request):
     videos = Video.objects.all()
-    return render(request, 'videos/list.html', {"videos": videos})
+    serializer_videos = VideoSerializer(videos, many=True)
+    return Response(serializer_videos.data)    
 
 
 def channel_videos(request, username):
