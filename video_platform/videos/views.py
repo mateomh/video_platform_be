@@ -29,14 +29,15 @@ def video_detail(request, video_id):
 @api_view(['GET'])
 def video_list(request):
     videos = Video.objects.all()
-    serializer_videos = VideoSerializer(videos, many=True)
-    return Response(serializer_videos.data)    
+    serialized_videos = VideoSerializer(videos, many=True)
+    return Response(serialized_videos.data)    
 
-
+@api_view(['GET'])
 def channel_videos(request, username):
-   videos = Video.objects.filter(user__username=username)
+    videos = Video.objects.filter(user__username=username)
+    serialized_videos = VideoSerializer(videos, many=True)
 
-   return render(request, 'videos/channel.html', {"videos": videos, "channel_name": username})
+    return Response(serialized_videos.data) 
 
 
 @login_required
