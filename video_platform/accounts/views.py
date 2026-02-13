@@ -1,24 +1,41 @@
-from django.shortcuts import render
-from django.contrib.auth import login
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
-from .forms import CustomUserCreationForm
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from rest_framework.response import Response
 
-# Create your views here.
-class RegisterView(CreateView):
-  form_class = CustomUserCreationForm
-  success_url = reverse_lazy('accounts:login')
-  template_name = 'accounts/register.html'
+from accounts.serializers import UserSerializer
 
-  def dispatch(self, request, *args, **kwargs):
-    if request.user.is_authenticated:
-      return redirect('/')
-    
-    return super().dispatch(request, *args, **kwargs)
+
+class ListUsers(generics.ListAPIView):
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveAPIView):
+  serializer_class = UserSerializer
+
+  def get_object(self):
+    user_id = self.kwargs['user_id']
+    user = get_object_or_404(User.objects, id = user_id)
+
+    return user
+
+
+class RegisterUser(generics.CreateAPIView):
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+
+class DeleteUser(generics.DestroyAPIView):
+  serializer_class = UserSerializer
+
+  def get_object(self):
+    user_id = self.kwargs['user_id']
+    user = get_object_or_404(User.objects, id = user_id)
+
+    return user
   
-  def form_valid(self, form):
-    response = super().form_valid(form)
-    login(self.request, self.object)
+  def perform_destroy(self, instance):
+    instance.delete()
 
-    return redirect('/')
-
+    return instance

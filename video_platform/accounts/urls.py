@@ -1,16 +1,12 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import RegisterView
+from accounts.views import ListUsers, UserDetail, RegisterUser, DeleteUser
 
 app_name = 'accounts'
 
 urlpatterns = [
-  path('register/', RegisterView.as_view(), name = 'register'),
-  path('login/', auth_views.LoginView.as_view(
-    template_name = 'accounts/login.html',
-    redirect_authenticated_user = True
-  ), name = 'login'),
-  path('logout/', auth_views.LogoutView.as_view(
-    template_name = 'accounts/logout.html'
-  ), name = 'logout')
+  path('register/', RegisterUser.as_view(), name = 'register'),
+  path('user/', ListUsers.as_view(), name = 'list'),
+  path('user/<int:user_id>', UserDetail.as_view(), name = 'detail'),
+  path('user/<int:user_id>/delete', DeleteUser.as_view(), name = 'delete'),
 ]
