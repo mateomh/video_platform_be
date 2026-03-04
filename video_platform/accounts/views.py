@@ -1,7 +1,9 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from accounts.serializers import UserSerializer
 
@@ -39,3 +41,20 @@ class DeleteUser(generics.DestroyAPIView):
     instance.delete()
 
     return instance
+
+
+class UserToken(ObtainAuthToken):
+  def post(self, request, *args, **kwargs):
+    serialized_data = self.serializer_class(data=request.data, context={'request': request})
+
+    serialized_data.is_valid(raise_exception=True)
+
+    user = serialized_data.validated_data['user']
+    token = Token.objects.get_or_create(user=user)[0]
+
+    return Response({
+      'user_name': user.username,
+      'token': token.key
+    })
+  
+
