@@ -5,28 +5,13 @@ class VideoUploadForm(forms.Form):
 
     title = forms.CharField(
         max_length=200,
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-input",
-                "placeholder": "Enter video title"
-            }
-        )
     )
     description = forms.CharField(
         required=False,
-        widget=forms.Textarea(
-            attrs={
-                "class": "form-input",
-                "placeholder": "Enter video description",
-                "rows": 4
-            }
-        )
     )
-    video_file = forms.FileField(
-        widget=forms.FileInput(attrs={
-            "class": "form-input",
-            "accept": "video/*"
-        })
+    video_file = forms.FileField()
+    thumbnail_file = forms.FileField(
+        required=False,
     )
 
     def clean_video_file(self):

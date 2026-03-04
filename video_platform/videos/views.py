@@ -2,7 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
-from rest_framework.decorators import api_view
+from rest_framework import authentication
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Video, VideoLike
 from .forms import VideoUploadForm
@@ -40,14 +42,17 @@ def channel_videos(request, username):
     return Response(serialized_videos.data) 
 
 
-@login_required
-@require_POST
+@api_view(['POST'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def video_upload(request):
   form = VideoUploadForm(request.POST, request.FILES)
   print(f"FORM VALID: {form.is_valid()}")
+  print(f"REQUEST DATA: {request.user}")
+
   if form.is_valid():
     video_file = form.cleaned_data['video_file']
-    custom_thumbnail = request.POST.get('thumbnail_data', '')
+    custom_thumbnail = form.cleaned_data['thumbnail_file']
 
     try:
       result = upload_video(
