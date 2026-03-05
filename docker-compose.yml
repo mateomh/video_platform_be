@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.dev
+    image: video-platform:1.0.0
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app:cached
