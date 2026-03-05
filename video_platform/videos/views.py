@@ -135,7 +135,7 @@ def delete_video(request, video_id):
 @permission_classes([IsAuthenticated])
 def video_vote(request, video_id):
   video = get_object_or_404(Video, id=video_id, user=request.user)
-  vote_type = request.POST.get('vote')
+  vote_type = request.data['vote']
 
   if vote_type not in ['like', 'dislike']:
      return JsonResponse({
