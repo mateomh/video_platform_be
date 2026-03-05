@@ -110,13 +110,9 @@ def video_upload(request):
   })
 
 
-@login_required
-def video_upload_page(request):
-    return render(request, "videos/upload.html", {"form": VideoUploadForm()})
-
-
-@login_required
-@require_POST
+@api_view(['DELETE'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_video(request, video_id):
   video = get_object_or_404(Video, id=video_id, user=request.user)
   
@@ -134,8 +130,9 @@ def delete_video(request, video_id):
   })
 
 
-@login_required
-@require_POST
+@api_view(['POST'])
+@authentication_classes([authentication.TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def video_vote(request, video_id):
   video = get_object_or_404(Video, id=video_id, user=request.user)
   vote_type = request.POST.get('vote')

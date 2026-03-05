@@ -8,6 +8,6 @@ urlpatterns = [
   path("videos/<int:video_id>", views.video_detail, name='detail'),
   path('upload', views.video_upload, name='upload_video'),
   path("channel/<str:username>/", views.channel_videos, name='channel'),
-  path("<int:video_id>/delete/", views.delete_video, name='delete'),
-  path("<int:video_id>/vote/", views.video_vote, name='vote'),
+  path("videos/<int:video_id>/delete", views.delete_video, name='delete'),
+  path("videos/<int:video_id>/vote", views.video_vote, name='vote'),
 ]
