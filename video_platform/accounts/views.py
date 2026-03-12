@@ -5,7 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from accounts.serializers import UserSerializer
 
@@ -13,6 +13,8 @@ from accounts.serializers import UserSerializer
 class ListUsers(generics.ListAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
+  authentication_classes = [TokenAuthentication]
+  permission_classes = [IsAdminUser]
 
 
 class UserDetail(generics.RetrieveAPIView):
@@ -32,6 +34,8 @@ class RegisterUser(generics.CreateAPIView):
 
 class DeleteUser(generics.DestroyAPIView):
   serializer_class = UserSerializer
+  authentication_classes = [TokenAuthentication]
+  permission_classes = [IsAdminUser]
 
   def get_object(self):
     user_id = self.kwargs['user_id']
