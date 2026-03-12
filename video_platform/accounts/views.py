@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 
 from accounts.serializers import UserSerializer
 
@@ -57,4 +59,12 @@ class UserToken(ObtainAuthToken):
       'token': token.key
     })
   
+
+class UserInfo(generics.RetrieveAPIView):
+  serializer_class = UserSerializer
+  authentication_classes = [TokenAuthentication]
+  permission_classes = [IsAuthenticated]
+
+  def get_object(self):
+    return self.request.user
 
