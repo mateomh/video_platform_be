@@ -13,3 +13,13 @@ dependencies = [
     "markdown>=3.10.2",
     "python-dotenv>=1.2.1",
 ]
+
+[dependency-groups]
+dev = [
+    "django-stubs>=5.2.9",
+    "djangorestframework-stubs>=3.16.8",
+]
+
+[tool.pyright]
+pythonVersion = "3.12"
+djangoStubsInterface = true

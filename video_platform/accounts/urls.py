@@ -1,5 +1,4 @@
 from django.urls import path
-from django.contrib.auth import views as auth_views
 from accounts.views import ListUsers, UserDetail, RegisterUser, DeleteUser, UserToken, UserInfo
 
 app_name = 'accounts'
