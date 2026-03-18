@@ -4,14 +4,9 @@ from ..models import Video, VideoLike
 
 @pytest.mark.django_db
 class TestVideoModel:
-  def test_video_model(self):
-    user = User.objects.create(
-      username="johndoe",
-      email="john@example.com"
-    )
-
+  def test_video_model(self, video_user):
     video = Video.objects.create(
-      user = user,
+      user = video_user,
       title = 'Test Video from Tests',
       description = 'This is a video made from the test'
     )
@@ -26,20 +21,15 @@ class TestVideoModel:
 
 @pytest.mark.django_db
 class TestVideoLikeModel:
-  def test_video_like_model(self):
-    user = User.objects.create(
-      username="johndoe",
-      email="john@example.com"
-    )
-
+  def test_video_like_model(self, video_user):
     video = Video.objects.create(
-      user = user,
+      user = video_user,
       title = 'Test Video from Tests',
       description = 'This is a video made from the test'
     )
 
     like = VideoLike.objects.create(
-      user = user,
+      user = video_user,
       video = video,
       value = VideoLike.LIKE
     )
