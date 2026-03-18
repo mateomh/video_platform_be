@@ -11,6 +11,7 @@ dependencies = [
     "djangorestframework>=3.16.1",
     "imagekitio>=5.2.0",
     "markdown>=3.10.2",
+    "pytest-django>=4.12.0",
     "python-dotenv>=1.2.1",
 ]
 
@@ -23,3 +24,9 @@ dev = [
 [tool.pyright]
 pythonVersion = "3.12"
 djangoStubsInterface = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "video_platform.settings"
+pythonpath = ["video_platform"]
+# -- recommended but optional:
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
