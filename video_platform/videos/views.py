@@ -63,7 +63,7 @@ def video_upload(request):
       print(f"VIDEO UPLOAD RESULT: {result}")
 
       thumbnail_url = ''
-      if custom_thumbnail and custom_thumbnail.startswith('data:image'):
+      if custom_thumbnail:
         try:
           base_name = video_file.name.rsplit('.', 1)[0]
           thumb_result = upload_thumbnail(
